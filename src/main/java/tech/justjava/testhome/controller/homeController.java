@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 import java.util.Map;
 
 @Controller
@@ -15,6 +16,7 @@ public class homeController {
     @GetMapping("/")
     public String home(Model model) {
 
+        // This part is for the three testimonials.
         model.addAttribute("testimonial1",
                 "We burned months with freelancers who ghosted us halfway through. JustJava came in, rebuilt the backend, and delivered our platform on a real timeline. Their structure and communication were a breath of fresh air—we finally felt like we had a real engineering team.");
 
@@ -24,19 +26,41 @@ public class homeController {
         model.addAttribute("testimonial3",
                 "We burned months with freelancers who ghosted us halfway through. JustJava came in, rebuilt the backend, and delivered our platform on a real timeline. Their structure and communication were a breath of fresh air—we finally felt like we had a real engineering team.");
 
+     // This part is for "we help startups".
+        model.addAttribute("heroText",
+                "We help start-ups and scale-ups build, launch, and maintain reliable software with dedicated engineering pods and a structured delivery process."
+        );
+
+
+// This part is for "we help startups" and testimonials.
         return "index";
     }
 
+    // This part is for "we help startups" also.
     @PostMapping("/save-text")
-    public String saveText(@RequestParam Map<String, String> params) {
-
-        String heroText = params.get("heroText");
+    public String saveText(@RequestParam String heroText, Model model) {
 
         System.out.println("==== TEXT FROM FRONTEND ====");
         System.out.println(heroText);
         System.out.println("===========================");
 
-        return "redirect:/";
+        model.addAttribute("heroText", heroText);
+
+        return "index";
     }
+
+
+
+//    @PostMapping("/save-text")
+//    public String saveText(@RequestParam Map<String, String> params) {
+//
+//        String heroText = params.get("heroText");
+//
+//        System.out.println("==== TEXT FROM FRONTEND ====");
+//        System.out.println(heroText);
+//        System.out.println("===========================");
+//
+//        return "redirect:/";
+//    }
 
 }
