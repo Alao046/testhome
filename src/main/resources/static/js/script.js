@@ -39,6 +39,58 @@
         }
       });
 
+
+      // ANIMATED WORDS FUNCTIONALITY
+
+      const wordSets = {
+        word1: ["Start-ups", "CTO's", "Fintech"],
+        word2: ["Build", "Scale", "Optimize", "Launch"],
+        word3: ["MVPs", "Software", "Apps", "Workflows"]
+      };
+
+      const currentIndexes = {
+        word1: 0,
+        word2: 0,
+        word3: 0
+      };
+
+      function animateWord(elementId) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+
+        const words = wordSets[elementId];
+
+        // Fade out
+        element.classList.add('fade-out');
+        element.classList.remove('fade-in');
+
+        setTimeout(() => {
+          // Update word
+          currentIndexes[elementId] = (currentIndexes[elementId] + 1) % words.length;
+          element.textContent = words[currentIndexes[elementId]];
+
+          // Fade in
+          element.classList.remove('fade-out');
+          element.classList.add('fade-in');
+        }, 400);
+      }
+
+      // Start animations with staggered timing
+      function startWordAnimations() {
+        // Animate each word at different intervals for variety
+        setInterval(() => animateWord('word1'), 2500);
+        setTimeout(() => {
+          setInterval(() => animateWord('word2'), 2500);
+        }, 800);
+        setTimeout(() => {
+          setInterval(() => animateWord('word3'), 2500);
+        }, 1600);
+      }
+
+      // Start animations when page loads
+      document.addEventListener('DOMContentLoaded', startWordAnimations);
+
+
       // Store active Quill editors
       const activeEditors = {};
 
