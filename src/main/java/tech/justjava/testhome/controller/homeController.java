@@ -9,8 +9,19 @@ import tech.justjava.testhome.repository.TestimonialRepository;
 
 import java.util.List;
 
+
+
+
 @Controller
 public class homeController {
+
+    @GetMapping("/about")
+    public String aboutPage() {
+        return "aboutpage";
+    }
+
+
+
 
     private String heroText =
             "We help start-ups and scale-ups build, launch, and maintain reliable software with dedicated engineering pods and a structured delivery process.";
@@ -43,6 +54,7 @@ public class homeController {
 
         model.addAttribute("testimonials", testimonials);
         model.addAttribute("heroText", heroText);
+
 
         return "index";
     }
