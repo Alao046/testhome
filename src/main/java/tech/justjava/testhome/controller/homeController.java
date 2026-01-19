@@ -20,7 +20,10 @@ public class homeController {
         return "aboutpage";
     }
 
-
+    @GetMapping("/designos")
+    public String designos() {
+        return "designos";
+    }
 
 
     private String heroText =
