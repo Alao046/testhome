@@ -17,8 +17,13 @@ public class homeController {
 
 //    FOR TWO ENDPOINTS
     @GetMapping("/public")
-    public String publicPage() {
-        return "public";   // loads public.html
+    public String publicPage(Model model) {
+
+        List<Testimonial> testimonials = testimonialRepo.findAll();
+
+        model.addAttribute("testimonials", testimonials);
+        model.addAttribute("heroText", heroText);
+        return "index";   // loads public
     }
 
     @GetMapping("/admin")
@@ -29,7 +34,7 @@ public class homeController {
         model.addAttribute("testimonials", testimonials);
         model.addAttribute("heroText", heroText);
 
-        return "index";    // loads admin.html
+        return "index";    // loads admin
     }
 
 
