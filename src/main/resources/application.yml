@@ -1,0 +1,15 @@
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/justjava
+        registration:
+          keycloak:
+            provider: keycloak
+            client-name: alao
+            client-id: justjava
+            client-secret: 5qqrR6ymGiubGAB1KEGCSvSqDDbpb1cW
+            authorization-grant-type: authorization_code
+            scope: openid,profile,email

@@ -15,6 +15,25 @@ import java.util.List;
 @Controller
 public class homeController {
 
+//    FOR TWO ENDPOINTS
+    @GetMapping("/public")
+    public String publicPage() {
+        return "public";   // loads public.html
+    }
+
+    @GetMapping("/admin")
+    public String adminPage(Model model) {
+
+        List<Testimonial> testimonials = testimonialRepo.findAll();
+
+        model.addAttribute("testimonials", testimonials);
+        model.addAttribute("heroText", heroText);
+
+        return "index";    // loads admin.html
+    }
+
+
+
     @GetMapping("/about")
     public String aboutPage() {
         return "aboutpage";
