@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.justjava.testhome.model.Testimonial;
 import tech.justjava.testhome.repository.TestimonialRepository;
 
+
 import java.util.List;
 
 
@@ -35,7 +36,6 @@ public class homeController {
         model.addAttribute("isAdminView", true);
         return "index";
     }
-
 
 
 
