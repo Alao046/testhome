@@ -1,9 +1,9 @@
 name: build site
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -41,7 +41,7 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_PROJECT_ID: 7edc707c-73e3-4b8b-915b-019e9d0b6114
-          RAILWAY_SERVICE_ID: justjava
+          RAILWAY_SERVICE_ID: justjavasite
         run: |
           IMAGE_REF="kazeemakinrinde/justjavasite:latest"
           echo "Updating service image to: $IMAGE_REF"
