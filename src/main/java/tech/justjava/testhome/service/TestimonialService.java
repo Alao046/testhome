@@ -3,10 +3,12 @@ package tech.justjava.testhome.service;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import tech.justjava.testhome.dto.TestimonialDto;
 import tech.justjava.testhome.model.Testimonial;
 import tech.justjava.testhome.repository.TestimonialRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TestimonialService {
@@ -17,32 +19,58 @@ public class TestimonialService {
         this.testimonialRepository = testimonialRepository;
     }
 
-    // READ: get all testimonials
-    public List<Testimonial> getAllTestimonials() {
-        return testimonialRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    // ================= READ =================
+    public List<TestimonialDto> getAllTestimonials() {
+        return testimonialRepository
+                .findAll(Sort.by(Sort.Direction.ASC, "id"))
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
-
-    // CREATE: add new testimonial
-    public void addTestimonial(Testimonial testimonial) {
-        testimonialRepository.save(testimonial);
+    // ================= CREATE =================
+    public void addTestimonial(TestimonialDto dto) {
+        testimonialRepository.save(toEntity(dto));
     }
 
-    // UPDATE: edit existing testimonial
-    public void updateTestimonial(Long id, Testimonial updatedTestimonial) {
+    // ================= UPDATE =================
+    public void updateTestimonial(Long id, TestimonialDto dto) {
         Testimonial existing = testimonialRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Testimonial not found"));
 
-        existing.setText(updatedTestimonial.getText());
-        existing.setName(updatedTestimonial.getName());
-        existing.setRole(updatedTestimonial.getRole());
-        existing.setCompany(updatedTestimonial.getCompany());
+        existing.setText(dto.getText());
+        existing.setName(dto.getName());
+        existing.setRole(dto.getRole());
+        existing.setCompany(dto.getCompany());
 
         testimonialRepository.save(existing);
     }
 
-    // DELETE: delete testimonial
+    // ================= DELETE =================
     public void deleteTestimonial(Long id) {
         testimonialRepository.deleteById(id);
     }
+
+    // ================= MAPPERS =================
+    private TestimonialDto toDto(Testimonial entity) {
+        return new TestimonialDto(
+                entity.getId(),
+                entity.getText(),
+                entity.getName(),
+                entity.getRole(),
+                entity.getCompany()
+        );
+    }
+
+    private Testimonial toEntity(TestimonialDto dto) {
+        return new Testimonial(
+                dto.getText(),
+                dto.getName(),
+                dto.getRole(),
+                dto.getCompany()
+        );
+    }
 }
+
+
+

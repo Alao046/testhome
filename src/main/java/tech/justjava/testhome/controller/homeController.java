@@ -4,18 +4,24 @@ package tech.justjava.testhome.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import tech.justjava.testhome.model.Testimonial;
-import tech.justjava.testhome.repository.TestimonialRepository;
+import tech.justjava.testhome.dto.TestimonialDto;
 import tech.justjava.testhome.service.TestimonialService;
-
-
-import java.util.List;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 public class homeController {
 
-//    FOR TWO ENDPOINTS
+    private final TestimonialService testimonialService;
+
+    private String heroText =
+            "We help start-ups and scale-ups build, launch, and maintain reliable software with dedicated engineering pods and a structured delivery process.";
+
+    public homeController(TestimonialService testimonialService) {
+        this.testimonialService = testimonialService;
+    }
+
+    // ================= PUBLIC & ADMIN PAGES =================
 
     @GetMapping("/public")
     public String publicPage(Model model) {
@@ -33,6 +39,12 @@ public class homeController {
         return "index";
     }
 
+    @GetMapping("/")
+    public String index() {
+        return "redirect:/public";
+    }
+
+    // ================= STATIC PAGES =================
 
     @GetMapping("/about")
     public String aboutPage() {
@@ -44,78 +56,33 @@ public class homeController {
         return "designos";
     }
 
+    // ================= HERO TEXT (ADMIN) =================
 
-    private String heroText =
-            "We help start-ups and scale-ups build, launch, and maintain reliable software with dedicated engineering pods and a structured delivery process.";
-
-    private final TestimonialService testimonialService;
-
-    public homeController(TestimonialService testimonialService) {
-        this.testimonialService = testimonialService;
-    }
-
-
-
-// REDiRECT TO PUBLIC WHEN USER ENTERS LOCALHOST:8081, BUT redirects to admin if the admin page is logged in first.
-//    @GetMapping("/")
-//    public String home(Model model) {
-//
-//        List<Testimonial> testimonials = testimonialRepo.findAll();
-//
-//        model.addAttribute("testimonials", testimonials);
-//        model.addAttribute("heroText", heroText);
-//
-//
-//        return "index";
-//    }
-
- // REDERICT TO PUBLIC WHEN USER ENTERS LOCALHOST:8081
-    @GetMapping("/")
-    public String index() {
-        return "redirect:/public";
-    }
-
+    private static final Logger log =
+            LoggerFactory.getLogger(homeController.class);
 
     @PostMapping("/save-text")
     public String saveText(@RequestParam String heroText) {
 
-        System.out.println("==== TEXT FROM FRONTEND ====");
-        System.out.println(heroText);
-        System.out.println("===========================");
+        log.info("Hero text updated: {}", heroText);
 
         this.heroText = heroText;
-
-//        return "redirect:/";
         return "redirect:/admin";
     }
 
+    // ================= TESTIMONIAL CRUD (DTO) =================
+
     // ADD
     @PostMapping("/admin/testimonials/add")
-    public String addTestimonial(
-            @RequestParam String text,
-            @RequestParam String name,
-            @RequestParam String role,
-            @RequestParam String company) {
-
-        testimonialService.addTestimonial(
-                new Testimonial(text, name, role, company)
-        );
+    public String addTestimonial(TestimonialDto dto) {
+        testimonialService.addTestimonial(dto);
         return "redirect:/admin";
     }
 
     // EDIT
     @PostMapping("/admin/testimonials/edit/{id}")
-    public String editTestimonial(
-            @PathVariable Long id,
-            @RequestParam String text,
-            @RequestParam String name,
-            @RequestParam String role,
-            @RequestParam String company) {
-
-        testimonialService.updateTestimonial(
-                id,
-                new Testimonial(text, name, role, company)
-        );
+    public String editTestimonial(@PathVariable Long id, TestimonialDto dto) {
+        testimonialService.updateTestimonial(id, dto);
         return "redirect:/admin";
     }
 
@@ -126,6 +93,8 @@ public class homeController {
         return "redirect:/admin";
     }
 }
+
+
 
 
 
