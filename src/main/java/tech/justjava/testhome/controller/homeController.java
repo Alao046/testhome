@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tech.justjava.testhome.model.Testimonial;
 import tech.justjava.testhome.repository.TestimonialRepository;
+import tech.justjava.testhome.service.TestimonialService;
 
 
 import java.util.List;
@@ -15,28 +16,22 @@ import java.util.List;
 public class homeController {
 
 //    FOR TWO ENDPOINTS
+
     @GetMapping("/public")
     public String publicPage(Model model) {
-        List<Testimonial> testimonials = testimonialRepo.findAll();
-        model.addAttribute("testimonials", testimonials);
+        model.addAttribute("testimonials", testimonialService.getAllTestimonials());
         model.addAttribute("heroText", heroText);
-
-        // Set flag to false for public view
         model.addAttribute("isAdminView", false);
         return "index";
     }
 
     @GetMapping("/admin")
     public String adminPage(Model model) {
-        List<Testimonial> testimonials = testimonialRepo.findAll();
-        model.addAttribute("testimonials", testimonials);
+        model.addAttribute("testimonials", testimonialService.getAllTestimonials());
         model.addAttribute("heroText", heroText);
-
-        // Set flag to true for admin view
         model.addAttribute("isAdminView", true);
         return "index";
     }
-
 
 
     @GetMapping("/about")
@@ -53,26 +48,13 @@ public class homeController {
     private String heroText =
             "We help start-ups and scale-ups build, launch, and maintain reliable software with dedicated engineering pods and a structured delivery process.";
 
-    private final TestimonialRepository testimonialRepo;
+    private final TestimonialService testimonialService;
 
-    public homeController(TestimonialRepository testimonialRepo) {
-        this.testimonialRepo = testimonialRepo;
-
-        // Seed database if empty
-        if (testimonialRepo.count() == 0) {
-            testimonialRepo.save(new Testimonial(
-                    "We burned months with freelancers who ghosted us halfway through...",
-                    "Simon Claw", "CEO", "Company"));
-
-            testimonialRepo.save(new Testimonial(
-                    "JustJava helped us scale faster than expected.",
-                    "Jane Doe", "CTO", "StartupX"));
-
-            testimonialRepo.save(new Testimonial(
-                    "Reliable engineering with clear delivery process everyday.",
-                    "Mark Stone", "Founder", "TechCorp"));
-        }
+    public homeController(TestimonialService testimonialService) {
+        this.testimonialService = testimonialService;
     }
+
+
 
 // REDiRECT TO PUBLIC WHEN USER ENTERS LOCALHOST:8081, BUT redirects to admin if the admin page is logged in first.
 //    @GetMapping("/")
@@ -106,7 +88,47 @@ public class homeController {
 //        return "redirect:/";
         return "redirect:/admin";
     }
+
+    // ADD
+    @PostMapping("/admin/testimonials/add")
+    public String addTestimonial(
+            @RequestParam String text,
+            @RequestParam String name,
+            @RequestParam String role,
+            @RequestParam String company) {
+
+        testimonialService.addTestimonial(
+                new Testimonial(text, name, role, company)
+        );
+        return "redirect:/admin";
+    }
+
+    // EDIT
+    @PostMapping("/admin/testimonials/edit/{id}")
+    public String editTestimonial(
+            @PathVariable Long id,
+            @RequestParam String text,
+            @RequestParam String name,
+            @RequestParam String role,
+            @RequestParam String company) {
+
+        testimonialService.updateTestimonial(
+                id,
+                new Testimonial(text, name, role, company)
+        );
+        return "redirect:/admin";
+    }
+
+    // DELETE
+    @PostMapping("/admin/testimonials/delete/{id}")
+    public String deleteTestimonial(@PathVariable Long id) {
+        testimonialService.deleteTestimonial(id);
+        return "redirect:/admin";
+    }
 }
+
+
+
 
 
 

@@ -1,3 +1,23 @@
+#for local deployment only:
+
+#spring:
+#  security:
+#    oauth2:
+#      client:
+#        provider:
+#          keycloak:
+#            issuer-uri: http://localhost:8080/realms/justjava
+#        registration:
+#          keycloak:
+#            provider: keycloak
+#            client-name: alao
+#            client-id: justjava
+#            client-secret: 5qqrR6ymGiubGAB1KEGCSvSqDDbpb1cW
+#            authorization-grant-type: authorization_code
+#            scope: openid,profile,email
+
+
+#FOR RAILWAY DEPLOYMENT ONLY
 
 server:
   # Uses the PORT provided by Railway, or defaults to 8081 if running locally
@@ -37,52 +57,4 @@ spring:
             client-secret: FcLFduxLqkUwY0C89mGkO3eTIfDg1toj
             authorization-grant-type: authorization_code
             scope: openid,profile,email
-
-#for deployment on railway
-#spring:
-#  application:
-#    name: testhome
-#
-#  datasource:
-#    url: ${JDBC_DATABASE_URL}
-#    username: ${JDBC_DATABASE_USERNAME}
-#    password: ${JDBC_DATABASE_PASSWORD}
-#
-#    hikari:
-#      connection-timeout: 30000
-#      maximum-pool-size: 10
-#
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    open-in-view: false
-#    show-sql: false
-#    properties:
-#      hibernate:
-#        jdbc:
-#          lob:
-#            non_contextual_creation: true
-#
-#  security:
-#    oauth2:
-#      client:
-#        provider:
-#          keycloak:
-#            issuer-uri: ${KEYCLOAK_ISSUER_URI}
-#        registration:
-#          keycloak:
-#            provider: keycloak
-#            client-name: justjava
-#            client-id: ${KEYCLOAK_CLIENT_ID}
-#            client-secret: ${KEYCLOAK_CLIENT_SECRET}
-#            authorization-grant-type: authorization_code
-#            scope: openid,profile,email
-#
-#server:
-#  port: ${PORT:8080}
-#
-#logging:
-#  level:
-#    org.springframework.security: INFO
-
 
